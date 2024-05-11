@@ -1,40 +1,27 @@
 #include "leelib.h"
 #include <stdio.h>
 
-int
-main ()
-{
+int main() {
+    int si, sj; // Declare start stations outside the loop
 
-  int si, sj, ti, tj;
+    int num_targets;
+    printf("Enter the number of target stations: ");
+    scanf("%d", &num_targets);
 
-  int num_targets;
+    printf("Enter the start cell: ");
+    readStation(&si, &sj); // Take input for start station only once
 
-  printf ("Enter the number of target stations: ");
+    for (int i = 0; i < num_targets; i++) {
+        int ti, tj; // Declare target stations inside the loop
 
-  scanf ("%d", &num_targets);
+        printf("Enter the target cell: ");
+        readStation(&ti, &tj);
 
-  printf ("Enter the start cell: ");
-
-  readStation (&si, &sj);
-
-  for (int i = 0; i < num_targets; i++)
-
-    {
-
-      int si, sj, ti, tj;
-
-      printf ("Enter the target cell: ");
-      readStation (&ti, &tj);
-      printf ("Enter the start cell: ");
-      readStation (&si, &sj);
-      
-
-      routeplanner (si, sj, ti, tj);
+        routeplanner(si, sj, ti, tj);
     }
 
-  return 0;
+    return 0;
 }
-
 
 
 
@@ -60,20 +47,7 @@ routeplanner (int si, int sj, int ti, int tj)
   }; //                1       2       3
 
  
- /*
-  printf ("Enter the target cell: ");
-
-  readStation (&ti, &tj);
-
-
-
-  printf ("Enter the start cell: ");
-
-  readStation (&si, &sj);
-
-
-  printf ("%d %d", si, sj);
-  */
+ 
 
   
   int v;
@@ -126,6 +100,8 @@ routeplanner (int si, int sj, int ti, int tj)
 
       v++;
     }
+   int crossingCount = 0;
+
 
   int ci = si; // setting current cell equal to start cell
   int cj = sj;
@@ -171,7 +147,12 @@ routeplanner (int si, int sj, int ti, int tj)
       if (ci != ti || cj != tj)
 
         printCrossingName (ci, cj);
+        crossingCount++;
+
     }
+      crossingCount = (crossingCount - 2) / 2;
+  printf ("Amount of crossings from Start to station: %d\n", crossingCount);	
+    
 }
 
 
