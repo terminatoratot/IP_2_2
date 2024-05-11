@@ -1,1 +1,177 @@
+#include "leelib.h"
+#include <stdio.h>
+
+int
+main ()
+{
+
+  int si, sj, ti, tj;
+
+  int num_targets;
+
+  printf ("Enter the number of target stations: ");
+
+  scanf ("%d", &num_targets);
+
+  printf ("Enter the start cell: ");
+
+  readStation (&si, &sj);
+
+  for (int i = 0; i < num_targets; i++)
+
+    {
+
+      int si, sj, ti, tj;
+
+      printf ("Enter the target cell: ");
+      readStation (&ti, &tj);
+      printf ("Enter the start cell: ");
+      readStation (&si, &sj);
+      
+
+      routeplanner (si, sj, ti, tj);
+    }
+
+  return 0;
+}
+
+
+
+
+
+void
+routeplanner (int si, int sj, int ti, int tj)
+{
+
+  int test_maze[13][13] = { //                9       8       7
+                            { -1, -1, -1, -1, 0, -1, 0, -1, 0, -1, -1, -1, -1 },
+                            { -1, -1, -1, -1, 0, -1, 0, -1, 0, -1, -1, -1, -1 },
+                            { -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1 },
+                            { -1, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, -1 },
+                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 6
+                            { -1, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, -1 },
+                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 5
+                            { -1, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, -1 },
+                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 4
+                            { -1, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, -1 },
+                            { -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1 },
+                            { -1, -1, -1, -1, 0, -1, 0, -1, 0, -1, -1, -1, -1 },
+                            { -1, -1, -1, -1, 0, -1, 0, -1, 0, -1, -1, -1, -1 }
+  }; //                1       2       3
+
+ 
+ /*
+  printf ("Enter the target cell: ");
+
+  readStation (&ti, &tj);
+
+
+
+  printf ("Enter the start cell: ");
+
+  readStation (&si, &sj);
+
+
+  printf ("%d %d", si, sj);
+  */
+
+  
+  int v;
+
+  v = 1;
+
+  test_maze[ti][tj] = v;
+
+  while (test_maze[si][sj] == 0)
+
+    {
+
+      for (int i = 0; i < 13; i++)
+
+        { // a nested loop to loop trough all the cells
+          for (int j = 0; j < 13; j++)
+
+            {
+
+              if (test_maze[i][j] == v)
+
+                {
+
+                  if (i > 0 && test_maze[i - 1][j] == 0)
+
+                    { // Check if there's a neighbor above
+                      test_maze[i - 1][j] = v + 1; // if so increment with one
+                    }
+
+                  if (i < 12 && test_maze[i + 1][j] == 0)
+
+                    { // Check if there's a neighbor below
+                      test_maze[i + 1][j] = v + 1; // if so increment with one
+                    }
+
+                  if (j > 0 && test_maze[i][j - 1] == 0)
+
+                    { // Check if there's a neighbor to the left
+                      test_maze[i][j - 1] = v + 1; // if so increment with one
+                    }
+
+                  if (j < 12 && test_maze[i][j + 1] == 0)
+
+                    { // Check if there's a neighbor to the right
+                      test_maze[i][j + 1] = v + 1;
+                    }
+                }
+            }
+        }
+
+      v++;
+    }
+
+  int ci = si; // setting current cell equal to start cell
+  int cj = sj;
+
+  printMatrix (test_maze);
+
+  while (ci != ti || cj != tj)
+
+    {
+
+      if (ci > 0 && test_maze[ci - 1][cj] < test_maze[ci][cj]
+          && test_maze[ci - 1][cj] > 0)
+
+        { // Check if there's a neighbor above which has a lower value then the
+          // current cell
+          ci = ci - 1;
+        }
+
+      else if (ci < 12 && test_maze[ci + 1][cj] < test_maze[ci][cj]
+               && test_maze[ci + 1][cj] > 0)
+
+        { // Check if there's a neighbor below which has a lower value then the
+          // current cell
+          ci = ci + 1;
+        }
+
+      else if (cj > 0 && test_maze[ci][cj - 1] < test_maze[ci][cj]
+               && test_maze[ci][cj - 1] > 0)
+
+        { // Check if there's a neighbor to the left which has a lower value
+          // then the current cell
+          cj = cj - 1;
+        }
+
+      else if (cj < 12 && test_maze[ci][cj + 1] < test_maze[ci][cj]
+               && test_maze[ci][cj + 1] > 0)
+
+        { // Check if there's a neighbor to the right which has a lower value
+          // then the current cell
+          cj = cj + 1;
+        }
+
+      if (ci != ti || cj != tj)
+
+        printCrossingName (ci, cj);
+    }
+}
+
 
